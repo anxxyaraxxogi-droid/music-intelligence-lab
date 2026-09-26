@@ -59,5 +59,70 @@ def get_genre_counts(connection):
 
     return genre_counts
     
+def get_average_rating(connection):
+    cursor = connection.cursor()
 
-    
+    cursor.execute("""
+        SELECT AVG(rating)
+        FROM songs
+    """)
+
+    average_rating = cursor.fetchone()[0]
+
+    return average_rating
+
+def get_artist_counts(connection):
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT artist, COUNT(*)
+        FROM songs
+        GROUP BY artist
+        ORDER BY COUNT(*) DESC
+    """)
+
+    artist_counts = cursor.fetchall()
+
+    return artist_counts
+
+def get_oldest_song(connection):
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT song, artist, year
+        FROM songs
+        ORDER BY year ASC
+        LIMIT 1
+    """)
+
+    oldest_song = cursor.fetchone()
+
+    return oldest_song
+
+def get_newest_song(connection):
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT song, artist, year
+        FROM songs
+        ORDER BY year DESC
+        LIMIT 1
+    """)
+
+    newest_song = cursor.fetchone()
+
+    return newest_song
+
+def get_top_rated_songs(connection):
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT song, artist, rating
+        FROM songs
+        ORDER BY rating DESC
+        LIMIT 5
+    """)
+
+    top_songs = cursor.fetchall()
+
+    return top_songs
