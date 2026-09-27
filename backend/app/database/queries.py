@@ -1,3 +1,12 @@
+def clear_songs(connection):
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        DELETE FROM songs
+    """)
+
+    connection.commit()
+
 def insert_songs(connection, songs):
     cursor = connection.cursor()
 

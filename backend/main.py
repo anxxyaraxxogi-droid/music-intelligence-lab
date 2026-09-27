@@ -1,8 +1,10 @@
-import csv
+
+from app.services.data_service import load_dataset
 from app.services.analysis_service import analyze_playlist
 from app.database.connection import create_connection
 from app.database.models import create_tables
 from app.database.queries import (
+    clear_songs,
     insert_songs,
     get_all_songs,
     get_genre_counts,
@@ -21,13 +23,15 @@ create_tables(connection)
 
  
 songs = []
+df = load_dataset("../data/seed/songs.csv")
 
-with open("../data/seed/songs.csv", "r") as f:
-    reader = csv.DictReader(f)
+songs = df.to_dict("records")
+# with open("../data/seed/songs.csv", "r") as f:
+#     reader = csv.DictReader(f)
 
-    for row in reader:
-        songs.append(row)
-
+#     for row in reader:
+#         songs.append(row)
+clear_songs(connection)
 insert_songs(connection, songs)
 
 genre_counts = get_genre_counts(connection)
@@ -62,6 +66,6 @@ print("\nTop rated songs:")
 for song, artist, rating in top_songs:
     print(f"{song} - {artist} ({rating})")
 
-results = analyze_playlist(songs)
+results = analyze_playlist(df)
 
 print(results)
