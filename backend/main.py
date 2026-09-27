@@ -1,15 +1,16 @@
 import csv
-from analysis import analyze_playlist
-# from database import create_connection, create_tables
-from database import (
-    create_connection,
-    create_tables,
+from app.services.analysis_service import analyze_playlist
+from app.database.connection import create_connection
+from app.database.models import create_tables
+from app.database.queries import (
     insert_songs,
+    get_all_songs,
     get_genre_counts,
     get_average_rating,
     get_artist_counts,
     get_oldest_song,
-    get_newest_song
+    get_newest_song,
+    get_top_rated_songs
 )
 
 connection = create_connection()
@@ -21,7 +22,7 @@ create_tables(connection)
  
 songs = []
 
-with open("../data/songs.csv", "r") as f:
+with open("../data/seed/songs.csv", "r") as f:
     reader = csv.DictReader(f)
 
     for row in reader:
